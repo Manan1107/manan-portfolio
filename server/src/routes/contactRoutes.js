@@ -62,7 +62,11 @@ const sendWithWeb3Forms = async ({ name, email, phone, subject, message }) => {
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok || data.success === false) {
-    throw new Error(data.message || "Web3Forms could not send the message.");
+    throw new Error(
+      data.message ||
+        data.error ||
+        `Web3Forms could not send the message. Status: ${response.status}. Response: ${JSON.stringify(data)}`
+    );
   }
 };
 
