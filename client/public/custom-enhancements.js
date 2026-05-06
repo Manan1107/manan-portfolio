@@ -87,12 +87,8 @@
 
 
   function getContactApiBase() {
-    return window.MANAN_API_BASE || (
-      window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "https://manan-portfolio-en6k.onrender.com/api"
-        : `${window.location.origin}/api`
-    );
-  }
+  return "https://manan-portfolio-en6k.onrender.com/api";
+}
 
   function setContactStatus(form, message, isError = false) {
     let status = form.querySelector(".custom-contact-status");
