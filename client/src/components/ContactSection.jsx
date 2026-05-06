@@ -14,11 +14,15 @@ export default function ContactSection({ apiBase }) {
     e.preventDefault();
     setStatus("Sending...");
     try {
-      await axios.post(`${apiBase}/contact`, form);
+      await axios.post(`${apiBase}/contact`, form, { timeout: 30000 });
       setStatus("Message sent successfully.");
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
-      setStatus("Failed to send message.");
+      setStatus(
+        error.code === "ECONNABORTED"
+          ? "Server did not respond. Open the Render backend once, then try again."
+          : error.response?.data?.message || "Failed to send message."
+      );
     }
   };
 

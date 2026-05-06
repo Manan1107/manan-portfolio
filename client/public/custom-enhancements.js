@@ -87,8 +87,24 @@
 
 
   function getContactApiBase() {
-  return "https://manan-portfolio-en6k.onrender.com/api";
-}
+    return window.MANAN_API_BASE || "https://manan-portfolio-en6k.onrender.com/api";
+  }
+
+  async function postContact(payload) {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 30000);
+
+    try {
+      return await fetch(`${getContactApiBase()}/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  }
 
   function setContactStatus(form, message, isError = false) {
     let status = form.querySelector(".custom-contact-status");
@@ -141,11 +157,7 @@
         setContactStatus(form, "Sending your message...");
 
         try {
-          const res = await fetch(`${getContactApiBase()}/contact`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
+          const res = await postContact(payload);
           const data = await res.json().catch(() => ({}));
           if (!res.ok) throw new Error(data.message || "Message could not be sent.");
 
@@ -155,7 +167,11 @@
           });
           setContactStatus(form, "Message sent. I will get back to you soon.");
         } catch (error) {
-          setContactStatus(form, error.message || "Something went wrong. Please email me directly.", true);
+          const message =
+            error.name === "AbortError"
+              ? "Server did not respond. Open the Render backend once, then try again."
+              : error.message || "Something went wrong. Please email me directly.";
+          setContactStatus(form, message, true);
         } finally {
           if (button) {
             button.disabled = false;

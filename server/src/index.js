@@ -11,7 +11,30 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigins = (
+  process.env.CLIENT_ORIGINS ||
+  [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://mananportfolioin.netlify.app",
+  ].join(",")
+)
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin(origin, callback) {
+    const isNetlifyOrigin = /^https:\/\/[a-z0-9-]+\.netlify\.app$/i.test(origin || "");
+
+    if (!origin || allowedOrigins.includes(origin) || isNetlifyOrigin) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`CORS blocked origin: ${origin}`));
+  },
+}));
 app.use(express.json());
 
 app.get("/", (_req, res) => {
