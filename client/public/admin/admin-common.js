@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://manan-portfolio-en6k.onrender.com/api";
 
 export function getAdminKey() {
   const field = document.getElementById("adminKey");

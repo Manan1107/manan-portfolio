@@ -89,7 +89,7 @@
   function getContactApiBase() {
     return window.MANAN_API_BASE || (
       window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-        ? "http://localhost:5000/api"
+        ? "https://manan-portfolio-en6k.onrender.com/api"
         : `${window.location.origin}/api`
     );
   }

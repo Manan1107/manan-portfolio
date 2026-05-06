@@ -4,7 +4,7 @@ import axios from "axios";
 import ContactSection from "./components/ContactSection";
 
 const resumeUrl = "/Manan_Javiya_Resume.pdf";
-const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const apiBase = import.meta.env.VITE_API_BASE_URL || "https://manan-portfolio-en6k.onrender.com/api";
 
 function HomePage() {
   return (
