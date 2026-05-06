@@ -1,0 +1,254 @@
+/* Performance fix: disable heavy cloned cursor while keeping the page usable */
+*,
+*::before,
+*::after {
+  cursor: auto !important;
+}
+
+html,
+body {
+  background:
+    linear-gradient(to right, rgba(10, 10, 10, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10, 10, 10, 0.055) 1px, transparent 1px),
+    #fffdf8 !important;
+  background-size: 72px 72px !important;
+}
+
+.custom-section-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 24px 80px;
+  background: transparent;
+  color: #0a0a0a;
+  font-family: Inter, sans-serif;
+}
+
+.custom-nav-link { display: none; }
+
+.custom-page-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* We no longer render a fake header; we reuse the real Emergent header */
+
+.custom-card-frame {
+  border: 1.5px solid #0a0a0a;
+  border-radius: 24px;
+  background: #f4efe6;
+}
+
+/* On blog/notes we don't want a huge boxed container */
+.custom-page-surface {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.custom-title {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(2rem, 6vw, 4.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  margin: 0 0 24px;
+}
+
+.custom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.custom-block {
+  padding: 28px;
+}
+
+.custom-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.custom-item {
+  padding: 16px;
+  border: 1.5px solid #0a0a0a;
+  border-radius: 16px;
+  background: #fffdf8;
+}
+
+.custom-item h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.custom-date {
+  margin: 0 0 8px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.custom-blog-item p:last-child {
+  margin-bottom: 0;
+}
+
+.custom-note-item {
+  display: grid;
+  gap: 8px;
+}
+
+.custom-form {
+  display: grid;
+  gap: 12px;
+}
+
+.custom-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #0a0a0a;
+  padding: 12px 0;
+  width: 100%;
+  font-size: 16px;
+  outline: none;
+  color: #0a0a0a;
+}
+
+.custom-input:focus {
+  border-bottom-color: #ff5e3a;
+}
+
+.custom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px solid #0a0a0a;
+  background: #0a0a0a;
+  color: #f4efe6;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #ff5e3a;
+}
+
+.custom-delete-btn {
+  width: fit-content;
+  padding: 8px 14px;
+  background: #ff5e3a;
+  color: #fff;
+}
+
+.custom-status {
+  font-size: 14px;
+  min-height: 20px;
+}
+
+.custom-contact-status {
+  margin: 14px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+[data-contact-action="phone-display"] {
+  cursor: default !important;
+}
+
+[data-contact-action="phone-display"] > svg:last-child {
+  display: none !important;
+}
+
+[data-contact-action="whatsapp"] {
+  position: relative;
+}
+
+[data-contact-action="whatsapp"] > :nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+[data-contact-action="whatsapp"] > :last-child {
+  margin-left: auto !important;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.custom-contact-layout {
+  display: grid !important;
+  align-items: start !important;
+  grid-template-columns: minmax(340px, 1fr) minmax(420px, 1fr) !important;
+  gap: 40px !important;
+}
+
+.custom-contact-form-card {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+  margin-top: 0 !important;
+}
+
+.custom-contact-cards {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  align-self: start !important;
+}
+
+.custom-contact-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: #0a0a0a;
+  color: #fffdf8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.custom-contact-label {
+  color: rgba(10, 10, 10, 0.58);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.custom-contact-value {
+  margin-top: 4px;
+  color: inherit;
+  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+#custom-contact-response-note {
+  max-width: 520px;
+  margin: 18px 0 34px;
+  color: #0a0a0a;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .custom-contact-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .custom-contact-form-card,
+  .custom-contact-cards {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .custom-grid {
+    grid-template-columns: 1fr;
+  }
+}
