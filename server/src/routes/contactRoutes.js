@@ -45,10 +45,33 @@ const createTransporter = () => {
   });
 };
 
+const sendWithWeb3Forms = async ({ name, email, phone, subject, message }) => {
+  const response = await fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      access_key: process.env.WEB3FORMS_ACCESS_KEY,
+      from_name: "Manan Portfolio",
+      subject: `New portfolio contact from ${name} - ${subject || "No subject"}`,
+      name,
+      email,
+      phone,
+      message,
+    }),
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.success === false) {
+    throw new Error(data.message || "Web3Forms could not send the message.");
+  }
+};
+
 router.get("/health", (_req, res) => {
   res.json({
     ok: true,
-    emailConfigured: !requiredEmailEnvMissing(),
+    emailConfigured: Boolean(process.env.WEB3FORMS_ACCESS_KEY) || !requiredEmailEnvMissing(),
+    web3FormsConfigured: Boolean(process.env.WEB3FORMS_ACCESS_KEY),
+    smtpConfigured: !requiredEmailEnvMissing(),
     recipientConfigured: Boolean(process.env.EMAIL_TO || process.env.EMAIL_USER),
   });
 });
@@ -74,14 +97,19 @@ router.post("/", async (req, res) => {
     });
   }
 
-  if (requiredEmailEnvMissing()) {
+  if (!process.env.WEB3FORMS_ACCESS_KEY && requiredEmailEnvMissing()) {
     return res.status(500).json({
       success: false,
-      message: "Email is not configured on the server. Add EMAIL_USER and EMAIL_PASS in Render.",
+      message: "Email is not configured on the server. Add WEB3FORMS_ACCESS_KEY in Render.",
     });
   }
 
   try {
+    if (process.env.WEB3FORMS_ACCESS_KEY) {
+      await sendWithWeb3Forms({ name, email, phone, subject, message });
+      return res.json({ success: true, message: "Email sent." });
+    }
+
     const transporter = createTransporter();
 
     await transporter.sendMail({

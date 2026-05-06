@@ -27,9 +27,11 @@
    - `npm run dev:client`
 
 ## Email Contact Setup
+- Recommended on Render: create a Web3Forms access key and set `WEB3FORMS_ACCESS_KEY`.
 - Use Gmail App Password for `EMAIL_PASS` (not your normal Gmail password).
 - `EMAIL_TO` is already your email `mananjaviya11@gmail.com`.
 - On Render, add these Environment variables:
+  - `WEB3FORMS_ACCESS_KEY`: your Web3Forms access key
   - `EMAIL_USER`: your Gmail address
   - `EMAIL_PASS`: your 16-character Gmail App Password
   - `EMAIL_TO`: `mananjaviya11@gmail.com`
