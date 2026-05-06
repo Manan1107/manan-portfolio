@@ -93,12 +93,25 @@
   async function postContact(payload) {
     const controller = new AbortController();
     const timeoutId = window.setTimeout(() => controller.abort(), 30000);
+    const web3FormsKey = window.MANAN_WEB3FORMS_ACCESS_KEY;
+    const hasWeb3FormsKey =
+      web3FormsKey && !web3FormsKey.includes("%VITE_WEB3FORMS_ACCESS_KEY%");
+
+    const url = hasWeb3FormsKey ? "https://api.web3forms.com/submit" : `${getContactApiBase()}/contact`;
+    const body = hasWeb3FormsKey
+      ? {
+          access_key: web3FormsKey,
+          from_name: "Manan Portfolio",
+          subject: `New portfolio contact from ${payload.name} - ${payload.subject || "No subject"}`,
+          ...payload,
+        }
+      : payload;
 
     try {
-      return await fetch(`${getContactApiBase()}/contact`, {
+      return await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(body),
         signal: controller.signal,
       });
     } finally {

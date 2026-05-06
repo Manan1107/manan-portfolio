@@ -36,6 +36,7 @@
   - `EMAIL_PASS`: your 16-character Gmail App Password
   - `EMAIL_TO`: `mananjaviya11@gmail.com`
   - `CLIENT_ORIGINS`: `https://mananportfolioin.netlify.app`
+- On Netlify, add `VITE_WEB3FORMS_ACCESS_KEY` with the same Web3Forms access key, then redeploy the frontend.
 - After redeploying the backend, open `/api/contact/health` on your Render URL. It should show `"emailConfigured": true`.
 
 ## Links

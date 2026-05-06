@@ -14,7 +14,20 @@ export default function ContactSection({ apiBase }) {
     e.preventDefault();
     setStatus("Sending...");
     try {
-      await axios.post(`${apiBase}/contact`, form, { timeout: 30000 });
+      if (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY) {
+        await axios.post(
+          "https://api.web3forms.com/submit",
+          {
+            access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+            from_name: "Manan Portfolio",
+            subject: `New portfolio contact from ${form.name} - ${form.subject || "No subject"}`,
+            ...form,
+          },
+          { timeout: 30000 }
+        );
+      } else {
+        await axios.post(`${apiBase}/contact`, form, { timeout: 30000 });
+      }
       setStatus("Message sent successfully.");
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
