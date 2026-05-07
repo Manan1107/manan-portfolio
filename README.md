@@ -1,43 +1,34 @@
-# Manan Javiya - Creative 3D MERN Portfolio
+# Manan Javiya Portfolio
 
 ## Features
-- 3D animated hero section with Three.js
-- Creative modern UI with glassmorphism
-- Blog section (stored in MongoDB)
-- Diary / Notes section (stored in MongoDB)
-- Contact form that sends email in real-time via Nodemailer
+- Creative portfolio frontend
+- Blog and notes stored with Netlify Blobs
+- Protected blog/notes admin pages using `ADMIN_KEY`
+- Contact form through Web3Forms
 - Resume download button
 
 ## Project Structure
-- `client` - React + Vite frontend
-- `server` - Express + MongoDB backend
+- `client` - React + Vite frontend, static pages, and Netlify Functions
+- `netlify.toml` - Netlify build and `/api/*` function routing
 
-## Setup
+## Netlify Setup
+Add these environment variables in Netlify:
+
+- `ADMIN_KEY`: your private admin password for blog/notes pages
+- `VITE_WEB3FORMS_ACCESS_KEY`: your Web3Forms access key
+
+Use Git-based Netlify deploys, not drag-and-drop deploys, because blog/notes now use Netlify Functions.
+
+Build settings:
+- Base directory: `client`
+- Build command: `npm run build`
+- Publish directory: `dist`
+
+## Local Setup
 1. Install dependencies:
-   - `npm run install:all`
-2. Create env files:
-   - Copy `server/.env.example` to `server/.env`
-   - Copy `client/.env.example` to `client/.env`
-3. Resume download setup:
-   - Create folder `client/public`
-   - Put your resume PDF in `client/public/Manan_Javiya_Resume.pdf`
-4. Run backend:
-   - `npm run dev:server`
-5. Run frontend:
-   - `npm run dev:client`
-
-## Email Contact Setup
-- Recommended on Render: create a Web3Forms access key and set `WEB3FORMS_ACCESS_KEY`.
-- Use Gmail App Password for `EMAIL_PASS` (not your normal Gmail password).
-- `EMAIL_TO` is already your email `mananjaviya11@gmail.com`.
-- On Render, add these Environment variables:
-  - `WEB3FORMS_ACCESS_KEY`: your Web3Forms access key
-  - `EMAIL_USER`: your Gmail address
-  - `EMAIL_PASS`: your 16-character Gmail App Password
-  - `EMAIL_TO`: `mananjaviya11@gmail.com`
-  - `CLIENT_ORIGINS`: `https://mananportfolioin.netlify.app`
-- On Netlify, add `VITE_WEB3FORMS_ACCESS_KEY` with the same Web3Forms access key, then redeploy the frontend.
-- After redeploying the backend, open `/api/contact/health` on your Render URL. It should show `"emailConfigured": true`.
+   - `npm install --prefix client`
+2. Run frontend:
+   - `npm run dev --prefix client`
 
 ## Links
 - GitHub: https://github.com/Manan1107
