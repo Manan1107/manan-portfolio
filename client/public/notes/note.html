@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notes | Manan Javiya</title>
+    <title>Note | Manan Javiya</title>
     <link rel="stylesheet" href="/public-pages.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,22 +14,16 @@
       <header class="top">
         <div>
           <p class="eyebrow">Notebook</p>
-          <h1>Notes</h1>
-          <p class="intro">A simple public notebook for learning updates, project direction, and small development reflections.</p>
+          <h1 id="title">Notes</h1>
+          <p id="subtitle" class="intro">Loading…</p>
         </div>
-        <nav class="nav" aria-label="Notes navigation">
-          <a class="chip" href="/">Home</a>
-          <a class="chip" href="/#work">Work</a>
-          <a class="chip" href="/blog/index.html">Blog</a>
-          <a class="chip is-active" href="/notes/index.html">Notes</a>
-        </nav>
       </header>
       <section class="panel">
-        <div id="list" class="list">
-          <p class="status">Loading notes...</p>
-        </div>
+        <article id="note" class="item">
+          <p class="status">Loading note…</p>
+        </article>
       </section>
     </main>
-    <script type="module" src="/notes/main.js"></script>
+    <script type="module" src="/notes/note.js"></script>
   </body>
 </html>

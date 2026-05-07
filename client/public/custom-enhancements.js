@@ -87,33 +87,44 @@
 
 
   function getContactApiBase() {
-    return window.MANAN_API_BASE || "/api";
+    return "";
+  }
+
+  async function sendViaFormSubmit(payload) {
+    const res = await fetch("https://formsubmit.co/ajax/mananjaviya11@gmail.com", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: payload.name,
+        email: payload.email,
+        subject: payload.subject || "Portfolio contact",
+        message: payload.message,
+        _subject: `Portfolio contact: ${payload.subject || "No subject"}`,
+        _captcha: "false",
+      }),
+    });
+    return res;
   }
 
   async function postContact(payload) {
     const controller = new AbortController();
     const timeoutId = window.setTimeout(() => controller.abort(), 30000);
-    const web3FormsKey = window.MANAN_WEB3FORMS_ACCESS_KEY;
-    const hasWeb3FormsKey =
-      web3FormsKey && !web3FormsKey.includes("%VITE_WEB3FORMS_ACCESS_KEY%");
-
-    const url = hasWeb3FormsKey ? "https://api.web3forms.com/submit" : `${getContactApiBase()}/contact`;
-    const body = hasWeb3FormsKey
-      ? {
-          access_key: web3FormsKey,
-          from_name: "Manan Portfolio",
-          subject: `New portfolio contact from ${payload.name} - ${payload.subject || "No subject"}`,
-          ...payload,
-        }
-      : payload;
 
     try {
-      return await fetch(url, {
+      const primary = await fetch("/.netlify/functions/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify(payload),
         signal: controller.signal,
       });
+      if (primary.ok) return primary;
+      // Fallback path for cases where Netlify function env/config is missing.
+      return await sendViaFormSubmit(payload);
+    } catch {
+      return await sendViaFormSubmit(payload);
     } finally {
       window.clearTimeout(timeoutId);
     }
@@ -209,6 +220,47 @@
     target.insertAdjacentElement("afterend", note);
   }
 
+  function addProfessionalStrip() {
+    if (document.getElementById("custom-professional-strip")) return;
+
+    const headings = Array.from(document.querySelectorAll("h1, h2"));
+    const anchor = headings.find((el) => /manan|developer|engineer/i.test(el.textContent || ""));
+    const section = anchor?.closest("section") || anchor?.parentElement;
+    if (!section || !section.parentElement) return;
+
+    const strip = document.createElement("section");
+    strip.id = "custom-professional-strip";
+    strip.className = "custom-professional-strip";
+    strip.innerHTML = `
+      <div class="custom-professional-card">
+        <h2>Full-stack developer focused on reliable, usable products.</h2>
+        <p>I build clean interfaces, practical APIs, and project experiences that feel polished from first click to final deploy. My work blends MERN fundamentals, thoughtful UI details, and a first-principles approach to performance, maintainability, and systems that scale.</p>
+      </div>
+      <div class="custom-professional-points" aria-label="Professional strengths">
+        <div class="custom-professional-point">React + Node.js</div>
+        <div class="custom-professional-point">API design</div>
+        <div class="custom-professional-point">Production deployment</div>
+      </div>
+    `;
+    section.insertAdjacentElement("afterend", strip);
+  }
+
+  function scrollToHashTarget() {
+    if (window.location.hash !== "#work") return;
+
+    const target =
+      document.getElementById("work") ||
+      Array.from(document.querySelectorAll("section")).find((section) =>
+        /selected work|my work|projects/i.test(section.textContent || "")
+      );
+
+    if (!target || target.dataset.mananScrolledIntoView === "1") return;
+    target.dataset.mananScrolledIntoView = "1";
+    window.setTimeout(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+  }
+
   function alignContactLayout() {
     const contact = document.getElementById("contact");
     const form = contact?.querySelector("form");
@@ -264,6 +316,8 @@
     wireContactForm();
     addContactResponseNote();
     alignContactLayout();
+    addProfessionalStrip();
+    scrollToHashTarget();
   }
 
   function start() {

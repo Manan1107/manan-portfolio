@@ -1,10 +1,25 @@
-import { useEffect, useState } from "react";
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, Navigate, Route, Routes, useParams } from "react-router-dom";
 import axios from "axios";
 import ContactSection from "./components/ContactSection";
 
 const resumeUrl = "/Manan_Javiya_Resume.pdf";
-const apiBase = import.meta.env.VITE_API_BASE_URL || "/api";
+const staticContent = {
+  blogs: "/content/blogs.json",
+  notes: "/content/notes.json",
+};
+
+async function fetchStaticItems(type) {
+  const { data } = await axios.get(staticContent[type]);
+  return data.map((item, index) => ({
+    _id: `${type}-${index}`,
+    title: item.title,
+    content: item.content,
+    text: item.content,
+    createdAt: item.date,
+    noteDate: item.date,
+  }));
+}
 
 function HomePage() {
   return (
@@ -55,8 +70,7 @@ function BlogPage() {
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
-    const { data } = await axios.get(`${apiBase}/blogs`);
-    setPosts(data);
+    setPosts(await fetchStaticItems("blogs"));
   };
 
   useEffect(() => { fetchPosts(); }, []);
@@ -67,12 +81,51 @@ function BlogPage() {
       <h2>Writing</h2>
       <div className="list">
         {posts.map((post) => (
-          <article className="blog-card" key={post._id}>
+          <Link key={post._id} to={`/blog/${encodeURIComponent(post._id)}`} className="blog-card click-card">
             <p className="meta">{new Date(post.createdAt).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
             <h3>{post.title}</h3>
-            <p>{post.content}</p>
-          </article>
+            <p className="clamp-2">{post.content}</p>
+          </Link>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function BlogDetailPage() {
+  const { postId } = useParams();
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    (async () => setPosts(await fetchStaticItems("blogs")))();
+  }, []);
+
+  const post = useMemo(
+    () => posts.find((p) => encodeURIComponent(p._id) === postId),
+    [posts, postId]
+  );
+
+  if (!post) {
+    return (
+      <section className="panel">
+        <p className="kicker">Blog</p>
+        <h2>Post not found</h2>
+        <p className="meta">This post may have been removed or the link is wrong.</p>
+        <div className="quick-links">
+          <Link to="/blog">Back to Blog</Link>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="panel">
+      <p className="kicker">Blog</p>
+      <h2>{post.title}</h2>
+      <p className="meta">{new Date(post.createdAt).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
+      <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.7 }}>{post.content}</p>
+      <div className="quick-links" style={{ marginTop: 18 }}>
+        <Link to="/blog">Back to Blog</Link>
       </div>
     </section>
   );
@@ -83,7 +136,7 @@ function NotesPage() {
   const [activeId, setActiveId] = useState(null);
 
   const fetchNotes = async () => {
-    const { data } = await axios.get(`${apiBase}/notes`);
+    const data = await fetchStaticItems("notes");
     setNotes(data);
     if (!activeId && data.length) setActiveId(data[0]._id);
   };
@@ -99,10 +152,18 @@ function NotesPage() {
       <div className="notes-layout">
         <aside className="notes-sidebar">
           {notes.map((note) => (
-            <button type="button" key={note._id} className={`note-item ${activeId === note._id ? "active" : ""}`} onClick={() => setActiveId(note._id)}>
+            <Link
+              key={note._id}
+              to={`/notes/${encodeURIComponent(note._id)}`}
+              className={`note-item ${activeId === note._id ? "active" : ""}`}
+              onClick={() => setActiveId(note._id)}
+            >
               <strong>{note.title}</strong>
               <span>{new Date(note.noteDate || note.createdAt).toLocaleDateString("en-IN", { dateStyle: "medium" })}</span>
-            </button>
+              <span className="clamp-2" style={{ color: "#c7ced8", fontSize: 12, lineHeight: 1.4 }}>
+                {note.text}
+              </span>
+            </Link>
           ))}
         </aside>
         <div className="notes-main">
@@ -116,6 +177,45 @@ function NotesPage() {
             <p>No notes yet.</p>
           )}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function NoteDetailPage() {
+  const { noteId } = useParams();
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    (async () => setNotes(await fetchStaticItems("notes")))();
+  }, []);
+
+  const note = useMemo(
+    () => notes.find((n) => encodeURIComponent(n._id) === noteId),
+    [notes, noteId]
+  );
+
+  if (!note) {
+    return (
+      <section className="panel">
+        <p className="kicker">Notes</p>
+        <h2>Note not found</h2>
+        <p className="meta">This note may have been removed or the link is wrong.</p>
+        <div className="quick-links">
+          <Link to="/notes">Back to Notes</Link>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="panel">
+      <p className="kicker">Notes</p>
+      <h2>{note.title}</h2>
+      <p className="meta">{new Date(note.noteDate || note.createdAt).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
+      <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.7 }}>{note.text}</p>
+      <div className="quick-links" style={{ marginTop: 18 }}>
+        <Link to="/notes">Back to Notes</Link>
       </div>
     </section>
   );
@@ -150,8 +250,10 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:postId" element={<BlogDetailPage />} />
           <Route path="/notes" element={<NotesPage />} />
-          <Route path="/contact" element={<section className="panel"><ContactSection apiBase={apiBase} /></section>} />
+          <Route path="/notes/:noteId" element={<NoteDetailPage />} />
+          <Route path="/contact" element={<section className="panel"><ContactSection /></section>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

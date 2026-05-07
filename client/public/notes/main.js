@@ -13,11 +13,13 @@ async function load() {
     list.innerHTML = notes
       .map(
         (note) => `
-          <article class="item">
-            <div class="meta">${formatDate(note.noteDate || note.createdAt)}</div>
-            <h2>${esc(note.title || "Untitled")}</h2>
-            <p>${esc(note.text)}</p>
-          </article>
+          <a class="item-link" href="/notes/note.html?id=${encodeURIComponent(note._id)}" aria-label="Open ${esc(note.title || "Untitled")}">
+            <article class="item">
+              <div class="meta">${formatDate(note.noteDate || note.createdAt)}</div>
+              <h2>${esc(note.title || "Untitled")}</h2>
+              <p class="clamp-2">${esc(note.text)}</p>
+            </article>
+          </a>
         `
       )
       .join("");

@@ -14,6 +14,60 @@ body {
   background-size: 72px 72px !important;
 }
 
+[x-component="CustomCursor"],
+[x-id^="CustomCursor"],
+body > div[style*="mix-blend-mode"] {
+  display: none !important;
+}
+
+.custom-professional-strip {
+  max-width: 1180px;
+  margin: -24px auto 72px;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 18px;
+  color: #0a0a0a;
+  font-family: Inter, sans-serif;
+}
+
+.custom-professional-card {
+  border: 1.5px solid #0a0a0a;
+  border-radius: 22px;
+  background: rgba(255, 253, 248, 0.9);
+  padding: clamp(18px, 3vw, 28px);
+  box-shadow: 10px 10px 0 rgba(10, 10, 10, 0.92);
+}
+
+.custom-professional-card h2 {
+  margin: 0 0 10px;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  line-height: 0.98;
+}
+
+.custom-professional-card p {
+  margin: 0;
+  color: rgba(10, 10, 10, 0.72);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.custom-professional-points {
+  display: grid;
+  gap: 10px;
+}
+
+.custom-professional-point {
+  border: 1.5px solid #0a0a0a;
+  border-radius: 999px;
+  background: #0a0a0a;
+  color: #fffdf8;
+  padding: 13px 16px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
 .custom-section-wrap {
   max-width: 1400px;
   margin: 0 auto;
@@ -236,6 +290,11 @@ body {
 }
 
 @media (max-width: 1024px) {
+  .custom-professional-strip {
+    grid-template-columns: 1fr;
+    margin-top: 18px;
+  }
+
   .custom-contact-layout {
     grid-template-columns: 1fr !important;
   }

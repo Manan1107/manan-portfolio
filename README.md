@@ -1,35 +1,35 @@
 # Manan Javiya Portfolio
 
-## Features
-- Creative portfolio frontend
-- Blog and notes stored with Netlify Blobs
-- Protected blog/notes admin pages using `ADMIN_KEY`
-- Contact form through Web3Forms
-- Resume download button
+## Content Editing
+Blog and notes are static files now. No admin pages and no database are required.
 
-## Project Structure
-- `client` - React + Vite frontend, static pages, and Netlify Functions
-- `netlify.toml` - Netlify build and `/api/*` function routing
+- Blog content: `client/public/content/blogs.json`
+- Notes content: `client/public/content/notes.json`
 
-## Netlify Setup
-Add these environment variables in Netlify:
+Edit those files, rebuild, and deploy the frontend when the content looks good.
 
-- `ADMIN_KEY`: your private admin password for blog/notes pages
-- `VITE_WEB3FORMS_ACCESS_KEY`: your Web3Forms access key
+## Local Setup
+1. Install dependencies:
+   - `npm install --prefix client`
+2. Run locally:
+   - `npm run dev --prefix client`
 
-Use Git-based Netlify deploys, not drag-and-drop deploys, because blog/notes now use Netlify Functions.
+## Contact Form
+
+The contact form sends email through Gmail SMTP using a Netlify Function. Add these environment variables in Netlify:
+
+- `GMAIL_USER`: your Gmail address
+- `GMAIL_APP_PASSWORD`: your 16-character Gmail App Password
+- `EMAIL_TO`: `mananjaviya11@gmail.com`
+
+Use a Gmail App Password, not your normal Gmail password.
+
+## Deploy
+Use Git deploys on Netlify because the contact form needs a Netlify Function.
 
 Build settings:
 - Base directory: `client`
 - Build command: `npm run build`
 - Publish directory: `dist`
 
-## Local Setup
-1. Install dependencies:
-   - `npm install --prefix client`
-2. Run frontend:
-   - `npm run dev --prefix client`
-
-## Links
-- GitHub: https://github.com/Manan1107
-- LinkedIn: https://www.linkedin.com/in/manan-javiya/
+For a simple static preview without email, you can still open `client/dist` after building.

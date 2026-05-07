@@ -1,8 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function ContactSection({ apiBase }) {
+export default function ContactSection() {
   const [status, setStatus] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -12,32 +13,46 @@ export default function ContactSection({ apiBase }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (isSending) return;
+    setIsSending(true);
     setStatus("Sending...");
     try {
-      if (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY) {
-        await axios.post(
-          "https://api.web3forms.com/submit",
-          {
-            access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-            from_name: "Manan Portfolio",
-            subject: `New portfolio contact from ${form.name} - ${form.subject || "No subject"}`,
-            ...form,
-          },
-          { timeout: 30000 }
-        );
-      } else {
-        await axios.post(`${apiBase}/contact`, form, { timeout: 30000 });
-      }
+      await axios.post("/.netlify/functions/contact", form, { timeout: 30000 });
       setStatus("Message sent successfully.");
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
-      setStatus(
-        error.code === "ECONNABORTED"
-          ? "Email service did not respond. Please try again."
-          : error.response?.data?.message || "Failed to send message."
-      );
+      try {
+        await axios.post(
+          "https://formsubmit.co/ajax/mananjaviya11@gmail.com",
+          {
+            name: form.name,
+            email: form.email,
+            subject: form.subject || "Portfolio contact",
+            message: form.message,
+            _subject: `Portfolio contact: ${form.subject || "No subject"}`,
+            _captcha: "false",
+          },
+          {
+            timeout: 30000,
+            headers: { Accept: "application/json" },
+          }
+        );
+        setStatus("Message sent successfully.");
+        setForm({ name: "", email: "", subject: "", message: "" });
+      } catch (fallbackError) {
+        setStatus(
+          fallbackError.code === "ECONNABORTED"
+            ? "Email service did not respond. Please try again."
+            : fallbackError.response?.data?.message || "Failed to send message. Please use the Email me button."
+        );
+      }
+    } finally {
+      setIsSending(false);
     }
   };
+
+  const directEmail = "mananjaviya11@gmail.com";
+  const mailtoHref = `mailto:${directEmail}`;
 
   return (
     <div className="contact-box">
@@ -69,7 +84,14 @@ export default function ContactSection({ apiBase }) {
           onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
           required
         />
-        <button type="submit">Send message</button>
+        <div className="cta-row" style={{ margin: 0 }}>
+          <button type="submit" disabled={isSending}>
+            {isSending ? "Sending..." : "Send message"}
+          </button>
+          <a className="btn btn-ghost" href={mailtoHref}>
+            Email me
+          </a>
+        </div>
         <p>{status}</p>
       </form>
     </div>

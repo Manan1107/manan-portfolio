@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Weekly Focus: Strengthening Full-Stack Foundations",
+    "date": "2026-05-07",
+    "content": "This week I focused on improving depth, not just speed. I spent time strengthening MERN fundamentals, especially around API data contracts, state flow in React, and practical folder architecture that scales without becoming noisy.\n\nI also worked on visual polish: spacing rhythm, interaction feedback, and readable long-form layout. My goal is to make interfaces feel intentional rather than assembled.\n\nExecution plan: ship one visible UI improvement every day, document one architectural decision, and keep each commit scoped so future reviews are cleaner."
+  },
+  {
+    "title": "Portfolio Direction: Simple Public Pages, Better Messaging",
+    "date": "2026-05-06",
+    "content": "I decided to keep blog and notes pages static-first, with content loaded from JSON. This keeps operations lightweight while still allowing fast updates and a clear writing workflow.\n\nThe bigger objective is communication quality. Every section should quickly answer: what I built, why I built it, and how I approached trade-offs.\n\nNext improvements: align design language across pages, add richer writing samples, and keep navigation straightforward so visitors can move from project highlights to deeper technical thinking."
+  },
+  {
+    "title": "Professional Polish Checklist",
+    "date": "2026-05-05",
+    "content": "Current checklist I am following before each release:\n\n1) Content clarity: stronger headings, concise intros, and concrete outcomes.\n2) UI consistency: repeated spacing scales, coherent color usage, and predictable hover states.\n3) Reliability: verify empty/loading/error states for public pages.\n4) Performance: remove unnecessary visual overhead and keep interactions responsive.\n\nThis process is helping me present work with more confidence and also build habits that transfer directly to production team environments."
+  },
+  {
+    "title": "What I Delivered Recently",
+    "date": "2026-05-04",
+    "content": "Delivered updates include: cleaner public writing pages, active navigation states, improved card interactions, and stronger long-form readability for single post/note views.\n\nI also wired practical content management through static files, which makes future publishing faster and less error-prone.\n\nThe next milestone is to expand project case studies with measurable outcomes, architecture diagrams, and brief notes on trade-offs made during implementation."
+  }
+]

@@ -8,22 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet" />
-    <title>Manan Portfolio</title>
+    <title>Manan Javiya</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
-      window.MANAN_API_BASE = "/api";
-      window.MANAN_WEB3FORMS_ACCESS_KEY = "%VITE_WEB3FORMS_ACCESS_KEY%";
-    </script>
-    <script>
-      const adminRedirects = {
-        "/admin/blog/": "/admin/blog/index.html",
-        "/admin/blog": "/admin/blog/index.html",
-        "/admin/notes/": "/admin/notes/index.html",
-        "/admin/notes": "/admin/notes/index.html",
-      };
-      if (adminRedirects[window.location.pathname]) {
-        window.location.replace(adminRedirects[window.location.pathname]);
-      }
-
       window.addEventListener(
         "error",
         function (e) {

@@ -1,20 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function NotesSection({ apiBase }) {
+export default function NotesSection() {
   const [notes, setNotes] = useState([]);
-  const [text, setText] = useState("");
 
   const fetchNotes = async () => {
-    const { data } = await axios.get(`${apiBase}/notes`);
-    setNotes(data);
-  };
-
-  const addNote = async (e) => {
-    e.preventDefault();
-    await axios.post(`${apiBase}/notes`, { text });
-    setText("");
-    fetchNotes();
+    const { data } = await axios.get("/content/notes.json");
+    setNotes(data.map((item, index) => ({ ...item, _id: `note-${index}`, text: item.content })));
   };
 
   useEffect(() => {
@@ -24,16 +16,6 @@ export default function NotesSection({ apiBase }) {
   return (
     <section className="section glass">
       <h2>Diary / Notes</h2>
-      <form className="form" onSubmit={addNote}>
-        <textarea
-          placeholder="Write your daily note..."
-          rows={3}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          required
-        />
-        <button type="submit">Save Note</button>
-      </form>
       <div className="cards">
         {notes.map((note) => (
           <article key={note._id} className="card">
