@@ -4,7 +4,7 @@ import axios from "axios";
 import ContactSection from "./components/ContactSection";
 
 const resumeUrl = "/Manan_Javiya_Resume.pdf";
-const apiBase = import.meta.env.VITE_API_BASE_URL || "https://manan-portfolio-en6k.onrender.com/api";
+const apiBase = import.meta.env.VITE_API_BASE_URL || "/api";
 
 function HomePage() {
   return (
@@ -53,8 +53,6 @@ function ProjectsPage() {
 
 function BlogPage() {
   const [posts, setPosts] = useState([]);
-  const [form, setForm] = useState({ title: "", content: "" });
-  const [status, setStatus] = useState("");
 
   const fetchPosts = async () => {
     const { data } = await axios.get(`${apiBase}/blogs`);
@@ -63,29 +61,10 @@ function BlogPage() {
 
   useEffect(() => { fetchPosts(); }, []);
 
-  const submit = async (e) => {
-    e.preventDefault();
-    setStatus("Publishing...");
-    try {
-      await axios.post(`${apiBase}/blogs`, form);
-      setForm({ title: "", content: "" });
-      setStatus("Published");
-      fetchPosts();
-    } catch {
-      setStatus("Failed to publish");
-    }
-  };
-
   return (
     <section className="panel blog-page">
       <p className="kicker">Blog</p>
       <h2>Writing</h2>
-      <form className="form" onSubmit={submit}>
-        <input placeholder="Blog title" value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} required />
-        <textarea rows={5} placeholder="Blog content" value={form.content} onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))} required />
-        <button type="submit">Publish Post</button>
-        <p>{status}</p>
-      </form>
       <div className="list">
         {posts.map((post) => (
           <article className="blog-card" key={post._id}>
@@ -102,8 +81,6 @@ function BlogPage() {
 function NotesPage() {
   const [notes, setNotes] = useState([]);
   const [activeId, setActiveId] = useState(null);
-  const [form, setForm] = useState({ title: "", text: "", noteDate: "" });
-  const [status, setStatus] = useState("");
 
   const fetchNotes = async () => {
     const { data } = await axios.get(`${apiBase}/notes`);
@@ -112,29 +89,6 @@ function NotesPage() {
   };
 
   useEffect(() => { fetchNotes(); }, []);
-
-  const submit = async (e) => {
-    e.preventDefault();
-    setStatus("Saving...");
-    try {
-      await axios.post(`${apiBase}/notes`, form);
-      setForm({ title: "", text: "", noteDate: "" });
-      setStatus("Saved");
-      fetchNotes();
-    } catch {
-      setStatus("Failed to save");
-    }
-  };
-
-  const removeNote = async (id) => {
-    try {
-      await axios.delete(`${apiBase}/notes/${id}`);
-      setNotes((prev) => prev.filter((n) => n._id !== id));
-      if (activeId === id) setActiveId(null);
-    } catch {
-      setStatus("Failed to delete note");
-    }
-  };
 
   const active = notes.find((n) => n._id === activeId);
 
@@ -157,20 +111,10 @@ function NotesPage() {
               <p className="meta">{new Date(active.noteDate || active.createdAt).toLocaleDateString("en-IN", { dateStyle: "medium" })}</p>
               <h3>{active.title}</h3>
               <p>{active.text}</p>
-              <button type="button" className="danger-btn" onClick={() => removeNote(active._id)}>
-                Delete Completed Note
-              </button>
             </article>
           ) : (
             <p>No notes yet.</p>
           )}
-          <form className="form" onSubmit={submit}>
-            <input placeholder="Note title" value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} required />
-            <input type="date" value={form.noteDate} onChange={(e) => setForm((p) => ({ ...p, noteDate: e.target.value }))} required />
-            <textarea rows={4} placeholder="Write note..." value={form.text} onChange={(e) => setForm((p) => ({ ...p, text: e.target.value }))} required />
-            <button type="submit">Save Note</button>
-            <p>{status}</p>
-          </form>
         </div>
       </div>
     </section>

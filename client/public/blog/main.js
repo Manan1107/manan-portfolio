@@ -22,7 +22,7 @@ async function load() {
       )
       .join("");
   } catch {
-    list.innerHTML = '<p class="status">Could not load blog posts. Make sure the backend is running.</p>';
+    list.innerHTML = '<p class="status">Could not load blog posts.</p>';
   }
 }
 

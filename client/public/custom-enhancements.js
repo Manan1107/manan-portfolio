@@ -87,7 +87,7 @@
 
 
   function getContactApiBase() {
-    return window.MANAN_API_BASE || "https://manan-portfolio-en6k.onrender.com/api";
+    return window.MANAN_API_BASE || "/api";
   }
 
   async function postContact(payload) {
@@ -182,7 +182,7 @@
         } catch (error) {
           const message =
             error.name === "AbortError"
-              ? "Server did not respond. Open the Render backend once, then try again."
+              ? "Email service did not respond. Please try again."
               : error.message || "Something went wrong. Please email me directly.";
           setContactStatus(form, message, true);
         } finally {

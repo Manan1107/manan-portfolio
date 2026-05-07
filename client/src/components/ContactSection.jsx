@@ -33,7 +33,7 @@ export default function ContactSection({ apiBase }) {
     } catch (error) {
       setStatus(
         error.code === "ECONNABORTED"
-          ? "Server did not respond. Open the Render backend once, then try again."
+          ? "Email service did not respond. Please try again."
           : error.response?.data?.message || "Failed to send message."
       );
     }

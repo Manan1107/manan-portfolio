@@ -1,4 +1,4 @@
-const API_BASE = "https://manan-portfolio-en6k.onrender.com/api";
+const API_BASE = "/api";
 
 export function getAdminKey() {
   const field = document.getElementById("adminKey");
@@ -10,6 +10,16 @@ export function setupAdminKeyField() {
   const field = document.getElementById("adminKey");
   if (!field) return;
   field.value = "";
+}
+
+export async function verifyAdminKey(key) {
+  const res = await fetch("/.netlify/functions/admin-auth", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ key }),
+  });
+  if (!res.ok) throw new Error("Invalid admin key");
+  return res.json();
 }
 
 export async function apiGet(endpoint) {

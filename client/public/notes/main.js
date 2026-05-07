@@ -22,7 +22,7 @@ async function load() {
       )
       .join("");
   } catch {
-    list.innerHTML = '<p class="status">Could not load notes. Make sure the backend is running.</p>';
+    list.innerHTML = '<p class="status">Could not load notes.</p>';
   }
 }
 

@@ -71,4 +71,4 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-load();
+window.addEventListener("manan-admin-ready", load, { once: true });

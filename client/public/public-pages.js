@@ -1,4 +1,4 @@
-const API_BASE = "https://manan-portfolio-en6k.onrender.com/api";
+const API_BASE = "/api";
 
 export function esc(value) {
   return String(value || "")
